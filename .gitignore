@@ -1,0 +1,15 @@
+# build output
+/.next/
+/out/
+
+# deps (normally hoisted to repo root, but just in case)
+/node_modules
+
+# runtime data (newsletter subscribers etc.)
+/data/
+
+# ts build artifact
+tsconfig.tsbuildinfo
+
+# env
+.env*
