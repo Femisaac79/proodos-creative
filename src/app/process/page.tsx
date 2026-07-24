@@ -7,9 +7,10 @@ import { FadeIn } from "@/components/motion";
 import { ArrowUpRight } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "Process · Proodos Creative Ltd",
+  title: "Our Web Design Process",
   description:
-    "Discover, Strategy, Design, Development, Launch, Growth. A clear six-step process so you always know what happens after you say yes.",
+    "Discover, Strategy, Design, Development, Launch, Growth. A clear six-step website design process for businesses in Nigeria, Ghana, and Africa so you always know what happens after you say yes.",
+  alternates: { canonical: "/process" },
 };
 
 export default function ProcessPage() {

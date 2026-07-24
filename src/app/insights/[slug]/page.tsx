@@ -18,10 +18,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticle(slug);
-  if (!article) return { title: "Article · Proodos Creative Ltd" };
+  if (!article) return { title: "Article" };
   return {
-    title: `${article.title} · Proodos Creative`,
+    title: article.title,
     description: article.excerpt,
+    alternates: { canonical: `/insights/${article.slug}` },
+    openGraph: {
+      type: "article",
+      title: article.title,
+      description: article.excerpt,
+      url: `/insights/${article.slug}`,
+    },
   };
 }
 
@@ -37,8 +44,27 @@ export default async function ArticlePage({
   const idx = ARTICLES.findIndex((a) => a.slug === slug);
   const next = ARTICLES[(idx + 1) % ARTICLES.length];
 
+  const SITE_URL = "https://proodoscreative.com";
+  const articleLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.excerpt,
+    author: { "@type": "Organization", name: "Proodos Creative Ltd" },
+    publisher: {
+      "@type": "Organization",
+      name: "Proodos Creative Ltd",
+    },
+    mainEntityOfPage: `${SITE_URL}/insights/${article.slug}`,
+    inLanguage: "en",
+  };
+
   return (
     <div className="page theme-ink">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }}
+      />
       <SectionBackdrop variant="pulse" />
 
       <article className="article-page shell">

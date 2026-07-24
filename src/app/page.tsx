@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import LogoMark from "@/components/logo-mark";
 import ManifestoBand from "@/components/manifesto-band";
@@ -5,6 +6,13 @@ import Reveal from "@/components/reveal";
 import RotatingWord from "@/components/rotating-word";
 import SectionBackdrop from "@/components/section-backdrop";
 import { ArrowUpRight } from "@/components/icons";
+
+export const metadata: Metadata = {
+  title: "Website Design & Web Development in Nigeria",
+  description:
+    "Proodos Creative builds premium websites for businesses in Nigeria, Ghana, and across Africa — websites, branding, video, and business solutions designed to earn trust and turn strangers into customers.",
+  alternates: { canonical: "/" },
+};
 
 const HERO_WORDS = ["customers.", "bookings.", "regulars.", "revenue."];
 
@@ -102,9 +110,6 @@ export default function Home() {
                 className="rise mt-10 flex flex-wrap items-center gap-8"
                 style={{ animationDelay: "420ms" }}
               >
-                <Link href="/contact" className="btn">
-                  Start a project
-                </Link>
                 <Link href="/work" className="link">
                   See our work <ArrowUpRight size={16} />
                 </Link>

@@ -6,9 +6,10 @@ import { FadeIn, Stagger, StaggerItem } from "@/components/motion";
 import { ArrowUpRight } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "About · Proodos Creative Ltd",
+  title: "About Our Web Design Agency",
   description:
-    "Proodos Creative is a studio that treats design as a business tool. We build credibility, attract customers, and grow revenue, not just beautiful screens.",
+    "Proodos Creative is a Lagos-based studio serving Nigeria, Ghana, and Africa that treats design as a business tool. We build credibility, attract customers, and grow revenue, not just beautiful screens.",
+  alternates: { canonical: "/about" },
 };
 
 const BELIEFS = [

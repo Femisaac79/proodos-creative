@@ -8,9 +8,10 @@ import { ArrowUpRight } from "@/components/icons";
 import { ARTICLES } from "@/content/articles";
 
 export const metadata: Metadata = {
-  title: "Insights · Proodos Creative Ltd",
+  title: "Insights on Websites & Growth for African Businesses",
   description:
-    "Practical articles for business owners: why a website earns trust, Google Business Profile vs a website, how hotels lose bookings, and what GS1 barcode registration really is.",
+    "Practical articles for business owners in Nigeria, Ghana, and Africa: why a website earns trust, Google Business Profile vs a website, how hotels lose bookings, and what GS1 barcode registration really is.",
+  alternates: { canonical: "/insights" },
 };
 
 export default function InsightsPage() {

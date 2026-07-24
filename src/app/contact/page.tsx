@@ -6,9 +6,10 @@ import { FadeIn, Stagger, StaggerItem } from "@/components/motion";
 import { ArrowUpRight } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "Contact · Proodos Creative Ltd",
+  title: "Contact Us · Start a Website Project",
   description:
-    "Start a project or book a discovery call. Reach Proodos Creative by form, WhatsApp, email, or phone, and see answers to the questions we hear most.",
+    "Start a website project or book a free discovery call. Reach Proodos Creative in Lagos, Nigeria by form, WhatsApp, email, or phone — we work with clients across Nigeria, Ghana, and Africa.",
+  alternates: { canonical: "/contact" },
 };
 
 const CHANNELS = [

@@ -37,44 +37,46 @@ export default function Nav() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="nav">
-      <div className="shell nav-inner">
-        <Link
-          href="/"
-          aria-label="Proodos Creative home"
-          className="text-2xl"
-        >
-          <Wordmark />
-        </Link>
-
-        <nav className="nav-links" aria-label="Primary">
-          {LINKS.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className={`nav-link${isActive(l.href) ? " is-active" : ""}`}
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="nav-end">
-          <Link href="/contact" className="btn nav-cta">
-            Let&apos;s talk
-          </Link>
-          <button
-            type="button"
-            className="nav-toggle"
-            aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
+    <>
+      <header className="nav">
+        <div className="shell nav-inner">
+          <Link
+            href="/"
+            aria-label="Proodos Creative home"
+            className="text-2xl"
           >
-            <span className={`nav-toggle-bar${open ? " a" : ""}`} />
-            <span className={`nav-toggle-bar${open ? " b" : ""}`} />
-          </button>
+            <Wordmark />
+          </Link>
+
+          <nav className="nav-links" aria-label="Primary">
+            {LINKS.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`nav-link${isActive(l.href) ? " is-active" : ""}`}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="nav-end">
+            <Link href="/contact" className="btn nav-cta">
+              Let&apos;s talk
+            </Link>
+            <button
+              type="button"
+              className="nav-toggle"
+              aria-expanded={open}
+              aria-label={open ? "Close menu" : "Open menu"}
+              onClick={() => setOpen((v) => !v)}
+            >
+              <span className={`nav-toggle-bar${open ? " a" : ""}`} />
+              <span className={`nav-toggle-bar${open ? " b" : ""}`} />
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
       <AnimatePresence>
         {open && (
@@ -115,6 +117,6 @@ export default function Nav() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

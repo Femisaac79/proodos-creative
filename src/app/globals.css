@@ -74,7 +74,7 @@ body {
 
 .display {
   font-family: var(--font-header);
-  font-size: clamp(2.75rem, 8.5vw, 7rem);
+  font-size: clamp(1.95rem, 6.6vw, 6.25rem);
   font-weight: 800;
   text-transform: uppercase;
   line-height: 0.98;
@@ -154,9 +154,9 @@ body {
 /* Mark used inline inside a headline, replacing an "o" */
 .inline-mark {
   display: inline-block;
-  width: 0.72em;
-  height: 0.72em;
-  vertical-align: -0.02em;
+  width: 0.86em;
+  height: 0.86em;
+  vertical-align: -0.12em;
   margin-inline: 0.02em;
 }
 
@@ -307,17 +307,11 @@ a:focus-visible {
 @media (max-width: 63.999rem) {
   .hero-video {
     width: 100%;
-    opacity: 0.4;
-    -webkit-mask-image: radial-gradient(
-      ellipse 88% 58% at 50% 36%,
-      #000 18%,
-      transparent 70%
-    );
-    mask-image: radial-gradient(
-      ellipse 88% 58% at 50% 36%,
-      #000 18%,
-      transparent 70%
-    );
+    right: 0;
+    opacity: 0.6;
+    object-position: 72% top;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 }
 
@@ -1405,6 +1399,21 @@ a:focus-visible {
   color: var(--sub);
 }
 
+.case-visit {
+  margin-top: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+.case-soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px dashed var(--hair);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--sub);
+}
+
 .case-results {
   display: grid;
   grid-template-columns: 1fr;
@@ -2178,4 +2187,437 @@ a:focus-visible {
 
 .newsletter-msg.is-error {
   color: #ffb4a2;
+}
+
+/* ---------------------------------------------------------------------------
+   Floating WhatsApp button — persistent quick-contact on every page
+--------------------------------------------------------------------------- */
+
+.whatsapp-fab {
+  position: fixed;
+  right: clamp(1rem, 4vw, 2rem);
+  bottom: clamp(1rem, 4vw, 2rem);
+  z-index: 45;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  background: #25d366;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.whatsapp-fab:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.whatsapp-fab:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-fab {
+    transition: none;
+  }
+}
+
+/* ===========================================================================
+   Work page — category system (Websites / Graphics & Logos / Barcodes)
+   =========================================================================== */
+
+.cat-nav {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--ink) 70%, transparent);
+  backdrop-filter: blur(12px);
+  border-block: 1px solid var(--hair);
+}
+
+.cat-nav-inner {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.3rem;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+}
+
+.cat-pill {
+  position: relative;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--sub);
+  transition: color 0.25s ease;
+}
+
+.cat-pill.is-active {
+  color: var(--ink);
+}
+
+.cat-pill-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 999px;
+  background: var(--green);
+}
+
+.cat-pill-label {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.cat-section {
+  padding-block: clamp(3.5rem, 8vw, 7rem);
+}
+
+.cat-section-graphics {
+  padding-bottom: 0;
+}
+
+.cat-header {
+  max-width: 46rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.cat-title {
+  font-family: var(--font-header);
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.98;
+  margin-top: 0.8rem;
+}
+
+.cat-lede {
+  margin-top: 1.1rem;
+  max-width: 40rem;
+  color: var(--sub);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  line-height: 1.6;
+}
+
+/* ---- Graphics spiral ---- */
+
+.spiral {
+  position: relative;
+}
+
+.spiral-stage {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1400px;
+}
+
+.spiral-rings {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: min(140vh, 140vw);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.spiral-ring {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--green) 30%, transparent);
+}
+
+.spiral-ring.r0 {
+  width: 100%;
+  height: 100%;
+}
+.spiral-ring.r1 {
+  width: 74%;
+  height: 74%;
+  border-style: dashed;
+  opacity: 0.7;
+}
+.spiral-ring.r2 {
+  width: 48%;
+  height: 48%;
+}
+.spiral-ring.r3 {
+  width: 24%;
+  height: 24%;
+  border-color: color-mix(in srgb, var(--blue) 45%, transparent);
+}
+
+.spiral-counter {
+  position: absolute;
+  top: clamp(1.5rem, 4vw, 3rem);
+  right: clamp(1.5rem, 5vw, 4rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  font-family: var(--font-header);
+  font-weight: 800;
+  color: var(--paper);
+}
+
+.spiral-counter-now {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--green);
+}
+.spiral-counter-sep,
+.spiral-counter-total {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  color: var(--sub);
+}
+
+.spiral-deck {
+  position: relative;
+  width: min(78vw, 340px);
+  aspect-ratio: 3 / 4;
+}
+
+.flyer {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
+}
+
+.flyer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.flyer-art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #fff;
+}
+
+.flyer-tag {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(4px);
+}
+
+.flyer-mid {
+  margin-top: auto;
+}
+
+.flyer-title {
+  font-family: var(--font-header);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  line-height: 0.95;
+}
+
+.flyer-sub {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+.flyer-foot {
+  margin-top: 1.4rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+}
+
+.flyer-client {
+  opacity: 0.9;
+}
+
+.flyer-mark {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.flyer-shine {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 80% at 20% 0%,
+    rgba(255, 255, 255, 0.28),
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+.spiral-hint {
+  position: absolute;
+  bottom: clamp(1.5rem, 4vw, 2.5rem);
+  left: 50%;
+  translate: -50% 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sub);
+}
+
+/* Reduced-motion / static fallback — flyers become a simple scroll-snap row */
+.spiral.is-static {
+  height: auto !important;
+}
+
+.spiral.is-static .spiral-stage {
+  position: static;
+  height: auto;
+  overflow-x: auto;
+  justify-content: flex-start;
+  gap: 1.25rem;
+  padding: 1.5rem clamp(1.25rem, 5vw, 2.5rem) 2.5rem;
+  scroll-snap-type: x mandatory;
+}
+
+.spiral.is-static .spiral-rings,
+.spiral.is-static .spiral-counter,
+.spiral.is-static .spiral-hint {
+  display: none;
+}
+
+.spiral.is-static .spiral-deck {
+  display: flex;
+  width: auto;
+  aspect-ratio: auto;
+  gap: 1.25rem;
+}
+
+.spiral.is-static .flyer {
+  position: relative;
+  inset: auto;
+  flex: 0 0 auto;
+  width: min(72vw, 300px);
+  aspect-ratio: 3 / 4;
+  scroll-snap-align: center;
+}
+
+/* ---- Barcode shelf ---- */
+
+.barcode-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 40rem) {
+  .barcode-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 64rem) {
+  .barcode-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.barcode-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  background: var(--panel);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.barcode-card:hover {
+  border-color: color-mix(in srgb, var(--green) 55%, transparent);
+  transform: translateY(-3px);
+}
+
+.barcode-cat {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.barcode-name {
+  margin-top: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.barcode-brand {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--sub);
+}
+
+.barcode-strip {
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.9rem 1rem 0.7rem;
+}
+
+.barcode-svg {
+  display: block;
+  width: 100%;
+  height: 44px;
+}
+
+.barcode-svg rect {
+  fill: #0b0b0b;
+}
+
+.barcode-digits {
+  display: block;
+  margin-top: 0.35rem;
+  text-align: center;
+  font-family: var(--font-jost), monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.28em;
+  color: #0b0b0b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barcode-card {
+    transition: none;
+  }
 }

@@ -6,9 +6,10 @@ import { FadeIn, Stagger, StaggerItem } from "@/components/motion";
 import { ArrowUpRight } from "@/components/icons";
 
 export const metadata: Metadata = {
-  title: "Services · Proodos Creative Ltd",
+  title: "Web Design, Branding & Business Solutions in Nigeria",
   description:
-    "Website design and development, business solutions, branding and graphic design, video and motion graphics, and GS1 barcode registration. Everything a business needs to be chosen.",
+    "Website design and development, business solutions, branding and graphic design, video and motion graphics, and GS1 barcode registration for businesses in Nigeria, Ghana, and across Africa. Everything a business needs to be chosen.",
+  alternates: { canonical: "/services" },
 };
 
 const SERVICES = [
