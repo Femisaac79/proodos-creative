@@ -1,7 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { FLYERS } from "@/data/work-extra";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger, useGSAP);
+}
 
 export default function GraphicsSpiral() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -13,112 +20,102 @@ export default function GraphicsSpiral() {
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduced(mq.matches);
-    if (mq.matches) return;
+    const onChange = () => setReduced(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
-    let ctx: { revert: () => void } | undefined;
-    let cancelled = false;
-
-    (async () => {
-      const gsapMod = await import("gsap");
-      const stMod = await import("gsap/ScrollTrigger");
-      if (cancelled) return;
-      const gsap = gsapMod.default;
-      const ScrollTrigger = stMod.ScrollTrigger;
-      gsap.registerPlugin(ScrollTrigger);
-
-      const wrap = wrapRef.current;
+  useGSAP(
+    () => {
+      if (reduced) return;
       const stage = stageRef.current;
-      if (!wrap || !stage) return;
+      if (!stage) return;
       const flyers = gsap.utils.toArray<HTMLElement>(".flyer", stage);
-
       const count = flyers.length;
 
-      ctx = gsap.context(() => {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: stage,
-            start: "top top",
-            end: () => "+=" + count * window.innerHeight,
-            scrub: 1,
-            pin: stage,
-            pinSpacing: true,
-            invalidateOnRefresh: true,
-            onUpdate: (self) => setProgress(self.progress),
-          },
-        });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: stage,
+          start: "top top",
+          end: () => "+=" + count * window.innerHeight,
+          scrub: 1,
+          pin: stage,
+          pinSpacing: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => setProgress(self.progress),
+        },
+      });
 
-        const focus = {
-          xPercent: 0,
-          yPercent: 0,
-          rotate: 0,
-          scale: 1,
-          autoAlpha: 1,
-          filter: "blur(0px)",
-        };
-        const entry = {
-          xPercent: 62,
-          yPercent: 66,
-          rotate: 34,
-          scale: 0.42,
-          autoAlpha: 0,
-          filter: "blur(16px)",
-        };
-        const exit = {
-          xPercent: -66,
-          yPercent: -72,
-          rotate: -30,
-          scale: 0.44,
-          autoAlpha: 0,
-          filter: "blur(16px)",
-        };
+      const focus = {
+        xPercent: 0,
+        yPercent: 0,
+        rotate: 0,
+        scale: 1,
+        autoAlpha: 1,
+        filter: "blur(0px)",
+      };
+      const entry = {
+        xPercent: 62,
+        yPercent: 66,
+        rotate: 34,
+        scale: 0.42,
+        autoAlpha: 0,
+        filter: "blur(16px)",
+      };
+      const exit = {
+        xPercent: -66,
+        yPercent: -72,
+        rotate: -30,
+        scale: 0.44,
+        autoAlpha: 0,
+        filter: "blur(16px)",
+      };
 
-        flyers.forEach((el, i) => {
-          const isFirst = i === 0;
+      flyers.forEach((el, i) => {
+        const isFirst = i === 0;
 
-          // First flyer is already in focus at scroll-top; the rest swing in
-          // along the spiral arc as they reach their slot. Every flyer —
-          // including the last — swings back out, so the stage is empty by
-          // the time the next section scrolls in.
-          gsap.set(el, { ...(isFirst ? focus : entry), zIndex: i });
+        // First flyer is already in focus at scroll-top; the rest swing in
+        // along the spiral arc as they reach their slot. Every flyer —
+        // including the last — swings back out, so the stage is empty by
+        // the time the next section scrolls in.
+        gsap.set(el, { ...(isFirst ? focus : entry), zIndex: i });
 
-          if (!isFirst) {
-            tl.to(el, { ...focus, duration: 0.55, ease: "power3.out" }, i);
-          }
-          tl.to(el, { ...exit, duration: 0.55, ease: "power3.in" }, i + 0.62);
-        });
-
-        // As the final flyer leaves, dissolve the rings, counter and hint too,
-        // so the pinned stage clears to black before the Barcodes section
-        // arrives — one graphics moment, cleanly handed off.
-        const tail = flyers.length - 1 + 0.62;
-        const chrome = [
-          ringsRef.current,
-          stage.querySelector(".spiral-counter"),
-          stage.querySelector(".spiral-hint"),
-        ].filter(Boolean);
-        if (chrome.length) {
-          tl.to(chrome, { autoAlpha: 0, duration: 0.55, ease: "power1.out" }, tail);
+        if (!isFirst) {
+          tl.to(el, { ...focus, duration: 0.55, ease: "power3.out" }, i);
         }
+        tl.to(el, { ...exit, duration: 0.55, ease: "power3.in" }, i + 0.62);
+      });
 
-        // Background rings rotate continuously through the whole scroll —
-        // the literal "spiral" the flyers travel along.
-        if (ringsRef.current) {
-          tl.to(
-            ringsRef.current,
-            { rotate: 220, ease: "none", duration: count },
-            0,
-          );
-        }
-      }, wrap);
+      // As the final flyer leaves, dissolve the rings, counter and hint too,
+      // so the pinned stage clears to black before the Barcodes section
+      // arrives — one graphics moment, cleanly handed off.
+      const tail = count - 1 + 0.62;
+      const chrome = [
+        ringsRef.current,
+        stage.querySelector(".spiral-counter"),
+        stage.querySelector(".spiral-hint"),
+      ].filter(Boolean);
+      if (chrome.length) {
+        tl.to(chrome, { autoAlpha: 0, duration: 0.55, ease: "power1.out" }, tail);
+      }
 
-      ScrollTrigger.refresh();
-    })();
+      // Background rings rotate continuously through the whole scroll —
+      // the literal "spiral" the flyers travel along.
+      if (ringsRef.current) {
+        tl.to(ringsRef.current, { rotate: 220, ease: "none", duration: count }, 0);
+      }
 
-    return () => {
-      cancelled = true;
-      if (ctx) ctx.revert();
-    };
-  }, []);
+      // Note: we deliberately do NOT force extra ScrollTrigger.refresh()
+      // calls on a timer here. A refresh recalculates every trigger's
+      // measurements, and if one fires while the user is already scrolling
+      // through this pinned section, it can momentarily clamp/desync the
+      // scroll position and break the pin mid-scroll. This site uses
+      // next/font (no FOUT/CLS), so the initial measurement is reliable —
+      // invalidateOnRefresh plus GSAP's built-in resize handling is enough.
+    },
+    { scope: wrapRef, dependencies: [reduced] },
+  );
 
   const count = FLYERS.length;
   const current = Math.min(count, Math.round(progress * (count - 1)) + 1);
