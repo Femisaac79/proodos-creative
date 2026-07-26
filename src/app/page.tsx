@@ -202,9 +202,12 @@ export default function Home() {
             <Reveal>
               <h2 className="display mx-auto max-w-5xl">
                 Your next customer is already searching. Let&apos;s give them a
-                reason to ch
-                <LogoMark className="inline-mark" />
-                <span className="sr-only">o</span>ose you.
+                reason to{" "}
+                <span className="choose-lockup">
+                  ch
+                  <LogoMark className="inline-mark" />
+                  <span className="sr-only">o</span>ose you.
+                </span>
               </h2>
             </Reveal>
             <Reveal delay={150}>

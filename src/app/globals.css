@@ -152,6 +152,11 @@ body {
 }
 
 /* Mark used inline inside a headline, replacing an "o" */
+.choose-lockup {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .inline-mark {
   display: inline-block;
   width: 0.86em;
@@ -349,6 +354,15 @@ a:focus-visible {
   .hero-copy {
     max-width: 50%;
   }
+
+  /* The shared .display sizing is tuned for full-width headlines
+     elsewhere (CTA sections, other page heroes). This column is capped to
+     half the shell's width to leave room for the video, so it needs its
+     own, smaller scale — otherwise "We turn strangers" / "into <word>."
+     wrap mid-phrase (or even mid-word) instead of sitting one per line. */
+  .hero .display {
+    font-size: clamp(1.6rem, 2.7vw, 2.6rem);
+  }
 }
 
 /* The mark sits below the headline, left-aligned, with the "Let's connect"
@@ -431,6 +445,7 @@ a:focus-visible {
    gets cut off mid-flow. */
 .word-cycle {
   display: inline-block;
+  white-space: nowrap;
   --letter-leave-dur: 780ms;
   --letter-enter-dur: 760ms;
   --letter-leave-stagger: 20ms;
