@@ -79,14 +79,15 @@ export default function RotatingWord({ words }: { words: string[] }) {
       <span className="sr-only">{word}</span>
       <span aria-hidden="true">
         {letters.map((ch, i) => {
-          // Bias the drift up and to the right (a gust carrying it off)
+          // Bias the drift to the right (a gust carrying it off) with only
+          // a slight lift, so letters don't sweep across the line above,
           // but scatter each letter's exact direction, spin, shrink, and
           // start time so the word disperses like dust, not a rigid slide.
           const s = i * 1.37 + word.length * 0.91;
           const style = {
             "--i": i,
-            "--dx": `${(0.45 + rand(s + 0.1) * 1.15).toFixed(3)}em`,
-            "--dy": `${(-(0.25 + rand(s + 3.7) * 1.15)).toFixed(3)}em`,
+            "--dx": `${(0.7 + rand(s + 0.1) * 1.3).toFixed(3)}em`,
+            "--dy": `${(0.1 - rand(s + 3.7) * 0.45).toFixed(3)}em`,
             "--rot": `${((rand(s + 8.2) - 0.5) * 46).toFixed(1)}deg`,
             "--dscale": (0.55 + rand(s + 15.9) * 0.25).toFixed(3),
             "--dj": Math.round(rand(s + 21.3) * 150),
