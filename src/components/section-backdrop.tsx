@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 type Variant = "drift" | "orbit" | "rise" | "pulse";
 
@@ -19,27 +19,34 @@ const DOTS = [
 /**
  * Decorative animated layer behind a green section. Purely visual:
  * absolutely positioned, clipped by the section, ignores pointer events,
- * hidden from the accessibility tree. Every variant animates transform/
- * opacity only (compositor-friendly), and all motion is disabled for
- * prefers-reduced-motion — the tinted shapes stay as a static wash.
+ * hidden from the accessibility tree.
+ *
+ * All motion is CSS keyframes on transform/opacity, so it runs on the
+ * compositor rather than a JS loop, and it is paused (`.bd-idle`) whenever
+ * the section is off-screen — a long page no longer animates a dozen
+ * layers nobody can see. prefers-reduced-motion stops it entirely; the
+ * tinted shapes stay as a static wash.
  */
 export default function SectionBackdrop({ variant }: { variant: Variant }) {
-  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => el.classList.toggle("bd-idle", !entry.isIntersecting),
+      { rootMargin: "120px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
-    <div className="bd" aria-hidden="true">
+    <div ref={ref} className={`bd bd-idle bd-${variant}`} aria-hidden="true">
       {variant === "drift" && (
         <>
-          <motion.div
-            className="bd-blob bd-blob-a"
-            animate={reduce ? undefined : { x: [0, 70, -50, 0], y: [0, -50, 45, 0] }}
-            transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="bd-blob bd-blob-b"
-            animate={reduce ? undefined : { x: [0, -60, 45, 0], y: [0, 40, -55, 0] }}
-            transition={{ duration: 38, repeat: Infinity, ease: "easeInOut" }}
-          />
+          <div className="bd-blob bd-blob-a" />
+          <div className="bd-blob bd-blob-b" />
         </>
       )}
 
@@ -47,12 +54,7 @@ export default function SectionBackdrop({ variant }: { variant: Variant }) {
         <>
           {/* Broken rings — the logo's orbit, blown up to landscape scale.
               Dash gap = the break; the two rings counter-rotate. */}
-          <motion.svg
-            className="bd-ring bd-ring-a"
-            viewBox="0 0 100 100"
-            animate={reduce ? undefined : { rotate: 360 }}
-            transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-          >
+          <svg className="bd-ring bd-ring-a" viewBox="0 0 100 100">
             <circle
               cx="50"
               cy="50"
@@ -63,13 +65,8 @@ export default function SectionBackdrop({ variant }: { variant: Variant }) {
               strokeLinecap="round"
               strokeDasharray="225 70.3"
             />
-          </motion.svg>
-          <motion.svg
-            className="bd-ring bd-ring-b"
-            viewBox="0 0 100 100"
-            animate={reduce ? undefined : { rotate: -360 }}
-            transition={{ duration: 110, repeat: Infinity, ease: "linear" }}
-          >
+          </svg>
+          <svg className="bd-ring bd-ring-b" viewBox="0 0 100 100">
             <circle
               cx="50"
               cy="50"
@@ -80,42 +77,29 @@ export default function SectionBackdrop({ variant }: { variant: Variant }) {
               strokeLinecap="round"
               strokeDasharray="160 135.3"
             />
-          </motion.svg>
+          </svg>
         </>
       )}
 
       {variant === "rise" &&
         DOTS.map((d) => (
-          <motion.span
+          <span
             key={d.left}
             className="bd-dot"
-            style={{
-              left: d.left,
-              width: d.size,
-              height: d.size,
-              background: d.tint,
-            }}
-            animate={
-              reduce
-                ? undefined
-                : { y: [0, -400, -800, -1200], opacity: [0, 0.9, 0.9, 0] }
+            style={
+              {
+                left: d.left,
+                width: d.size,
+                height: d.size,
+                background: d.tint,
+                "--dur": `${d.dur}s`,
+                "--delay": `${d.delay}s`,
+              } as React.CSSProperties
             }
-            transition={{
-              duration: d.dur,
-              delay: d.delay,
-              repeat: Infinity,
-              ease: "linear",
-            }}
           />
         ))}
 
-      {variant === "pulse" && (
-        <motion.div
-          className="bd-glow"
-          animate={reduce ? undefined : { scale: [1, 1.16, 1], opacity: [0.55, 1, 0.55] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        />
-      )}
+      {variant === "pulse" && <div className="bd-glow" />}
     </div>
   );
 }

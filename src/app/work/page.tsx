@@ -50,6 +50,7 @@ const PROJECTS: Project[] = [
       "A multi-page website with a full service catalogue, curated health-check packages, online test booking, and home sample-collection requests, structured so patients can find the right test and book it in a couple of taps.",
     deliverables: ["Website Design & Development", "Online Booking", "SEO"],
     tech: ["Next.js", "React", "Tailwind CSS"],
+    url: "https://taupe-kulfi-c22e9f.netlify.app/",
   },
   {
     index: "03",
@@ -72,6 +73,7 @@ const PROJECTS: Project[] = [
       "An award-style corporate website with bold motion and a confident identity, presenting the company's services and credibility to win larger, trust-sensitive contracts.",
     deliverables: ["Website Design & Development", "Brand Identity", "Motion"],
     tech: ["Next.js", "React", "Framer Motion"],
+    url: "https://www.sunshineguardservices.com",
   },
   {
     index: "05",
@@ -146,7 +148,6 @@ export default function WorkPage() {
 
       <section id="websites" className="cat-section">
         <FadeIn className="shell cat-header">
-          <p className="eyebrow">01 — Websites</p>
           <h2 className="cat-title">Websites we&apos;ve built</h2>
           <p className="cat-lede">
             Full websites, designed and developed end to end for real
@@ -162,9 +163,10 @@ export default function WorkPage() {
                 <span aria-hidden="true">{p.index}</span>
               </FadeIn>
               <FadeIn delay={0.05}>
-                <p className="eyebrow">{p.sector}</p>
                 <h2 className="headline case-name">{p.name}</h2>
-                {p.location && <span className="case-tag">{p.location}</span>}
+                <span className="case-tag">
+                  {p.location ? `${p.sector} · ${p.location}` : p.sector}
+                </span>
               </FadeIn>
             </div>
 
@@ -220,7 +222,6 @@ export default function WorkPage() {
 
       <section id="graphics" className="cat-section cat-section-graphics">
         <FadeIn className="shell cat-header">
-          <p className="eyebrow">02 — Graphics &amp; Logos</p>
           <h2 className="cat-title">Flyers, campaigns &amp; identities</h2>
           <p className="cat-lede">
             Scroll to unwind the reel — flyers, promos, menus, and logo systems
@@ -232,7 +233,6 @@ export default function WorkPage() {
 
       <section id="barcodes" className="cat-section">
         <FadeIn className="shell cat-header">
-          <p className="eyebrow">03 — Barcodes</p>
           <h2 className="cat-title">Retail-ready product barcodes</h2>
           <p className="cat-lede">
             Registered, GS1-style barcodes that get products scanning, tracked,

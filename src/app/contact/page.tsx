@@ -4,11 +4,12 @@ import SectionBackdrop from "@/components/section-backdrop";
 import ContactForm from "@/components/contact-form";
 import { FadeIn, Stagger, StaggerItem } from "@/components/motion";
 import { ArrowUpRight } from "@/components/icons";
+import { ADDRESS_LINE, CONTACT, MAPS_URL, whatsappLink } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact Us · Start a Website Project",
   description:
-    "Start a website project or book a free discovery call. Reach Proodos Creative in Lagos, Nigeria by form, WhatsApp, email, or phone — we work with clients across Nigeria, Ghana, and Africa.",
+    "Start a website project or book a free discovery call. Reach Proodos Creative in Alakuko, Lagos by form, WhatsApp, email, or phone — we work with clients across Nigeria, Ghana, and Africa.",
   alternates: { canonical: "/contact" },
 };
 
@@ -16,26 +17,26 @@ const CHANNELS = [
   {
     label: "WhatsApp",
     value: "Chat with us now",
-    href: "https://wa.me/2348060575360",
+    href: whatsappLink(),
     note: "Fastest reply",
   },
   {
     label: "Email",
-    value: "hello@proodoscreative.com",
-    href: "mailto:hello@proodoscreative.com",
+    value: CONTACT.email,
+    href: `mailto:${CONTACT.email}`,
     note: "We reply within a day",
   },
   {
     label: "Phone",
-    value: "+234 806 057 5360",
-    href: "tel:+2348060575360",
+    value: CONTACT.phoneDisplay,
+    href: `tel:${CONTACT.phone}`,
     note: "Mon–Fri, 9–5 WAT",
   },
   {
     label: "Location",
-    value: "Lagos, Nigeria",
-    href: "#",
-    note: "Working with clients everywhere",
+    value: ADDRESS_LINE,
+    href: MAPS_URL,
+    note: "Open in Google Maps",
   },
 ];
 
@@ -64,7 +65,6 @@ export default function ContactPage() {
       <SectionBackdrop variant="drift" />
 
       <PageHero
-        eyebrow="Contact"
         title="Let's start something."
         lede="Tell us what you're building toward. Book a free discovery call, or just say hello, whichever's easier."
       />
@@ -92,12 +92,16 @@ export default function ContactPage() {
           </Stagger>
 
           <FadeIn className="booking" delay={0.1}>
-            <p className="eyebrow">Prefer to talk?</p>
             <p className="booking-copy">
               Book a free 30-minute discovery call. We&apos;ll talk through your
               goal and tell you honestly whether we&apos;re the right fit.
             </p>
-            <a href="https://wa.me/2348060575360" className="btn mt-6">
+            <a
+              href={whatsappLink("Hi Proodos Creative, I'd like to book a discovery call.")}
+              className="btn mt-6"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Book a discovery call <ArrowUpRight size={16} />
             </a>
           </FadeIn>
@@ -106,8 +110,7 @@ export default function ContactPage() {
 
       <section className="shell contact-faq">
         <FadeIn>
-          <p className="eyebrow">Before you ask</p>
-          <h2 className="headline mt-6">Questions we hear a lot</h2>
+          <h2 className="headline">Questions we hear a lot</h2>
         </FadeIn>
         <div className="faq-list mt-12">
           {FAQ.map((f, i) => (

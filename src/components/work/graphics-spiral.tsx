@@ -14,7 +14,9 @@ export default function GraphicsSpiral() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const ringsRef = useRef<HTMLDivElement>(null);
-  const [progress, setProgress] = useState(0);
+  // Only the 1-based index of the flyer in focus lives in React state, so
+  // scrolling re-renders once per flyer rather than on every frame.
+  const [current, setCurrent] = useState(1);
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
@@ -43,7 +45,10 @@ export default function GraphicsSpiral() {
           pinSpacing: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          onUpdate: (self) => setProgress(self.progress),
+          onUpdate: (self) => {
+            const next = Math.min(count, Math.round(self.progress * (count - 1)) + 1);
+            setCurrent((c) => (c === next ? c : next));
+          },
         },
       });
 
@@ -53,7 +58,6 @@ export default function GraphicsSpiral() {
         rotate: 0,
         scale: 1,
         autoAlpha: 1,
-        filter: "blur(0px)",
       };
       const entry = {
         xPercent: 62,
@@ -61,7 +65,6 @@ export default function GraphicsSpiral() {
         rotate: 34,
         scale: 0.42,
         autoAlpha: 0,
-        filter: "blur(16px)",
       };
       const exit = {
         xPercent: -66,
@@ -69,8 +72,11 @@ export default function GraphicsSpiral() {
         rotate: -30,
         scale: 0.44,
         autoAlpha: 0,
-        filter: "blur(16px)",
       };
+
+      // No blur in these states: animating `filter` on large, shadowed cards
+      // repaints every scrubbed frame and stutters on phones. Scale + fade +
+      // the spiral arc carry the depth on the compositor alone.
 
       flyers.forEach((el, i) => {
         const isFirst = i === 0;
@@ -118,7 +124,6 @@ export default function GraphicsSpiral() {
   );
 
   const count = FLYERS.length;
-  const current = Math.min(count, Math.round(progress * (count - 1)) + 1);
 
   return (
     <div ref={wrapRef} className={`spiral${reduced ? " is-static" : ""}`}>

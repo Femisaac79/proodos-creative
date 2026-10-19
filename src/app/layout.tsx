@@ -1,8 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Jost, Unbounded } from "next/font/google";
 import Nav from "@/components/nav";
 import SiteFooter from "@/components/site-footer";
 import WhatsAppButton from "@/components/whatsapp-button";
+import ConsentAnalytics from "@/components/consent-analytics";
 import "./globals.css";
 
 const jost = Jost({
@@ -19,7 +22,11 @@ const unbounded = Unbounded({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://proodoscreative.com";
+import { CONTACT, SITE_URL } from "@/lib/site";
+
+export const viewport: Viewport = {
+  themeColor: "#8fbe42",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -96,14 +103,17 @@ const jsonLd = {
       description:
         "Web design and development agency building premium websites, branding, and business solutions for companies across Nigeria, Ghana, and Africa.",
       url: SITE_URL,
-      email: "hello@proodoscreative.com",
-      telephone: "+2348060575360",
+      email: CONTACT.email,
+      telephone: CONTACT.phone,
       priceRange: "$$",
-      image: `${SITE_URL}/media/hero-glass.mp4`,
+      image: `${SITE_URL}/opengraph-image`,
+      logo: `${SITE_URL}/icon.svg`,
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Lagos",
-        addressCountry: "NG",
+        streetAddress: `${CONTACT.address.street}, ${CONTACT.address.area}`,
+        addressLocality: CONTACT.address.city,
+        addressRegion: "Lagos",
+        addressCountry: CONTACT.address.country,
       },
       areaServed: [
         { "@type": "Country", name: "Nigeria" },
@@ -150,6 +160,9 @@ export default function RootLayout({
         {children}
         <SiteFooter />
         <WhatsAppButton />
+        <ConsentAnalytics />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

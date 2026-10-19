@@ -86,19 +86,24 @@ export default function Home() {
         <section className="hero">
           <video
             className="hero-video"
-            src="/media/hero-glass.mp4"
+            poster="/media/hero-glass-poster.webp"
             autoPlay
             muted
             loop
             playsInline
+            preload="auto"
             aria-hidden="true"
-          />
+          >
+            <source src="/media/hero-glass.webm" type="video/webm" />
+            <source src="/media/hero-glass.mp4" type="video/mp4" />
+          </video>
           <div className="shell hero-stack">
             <div className="hero-copy">
               <h1 className="display rise" style={{ animationDelay: "120ms" }}>
-                We turn strangers
+                We turn <br className="hero-br" />
+                strangers into
                 <br />
-                into <RotatingWord words={HERO_WORDS} />
+                <RotatingWord words={HERO_WORDS} />
               </h1>
               <div className="hero-mark-row rise" style={{ animationDelay: "300ms" }}>
                 <LogoMark className="hero-mark" />
@@ -125,8 +130,7 @@ export default function Home() {
           <SectionBackdrop variant="drift" />
           <div className="shell">
             <Reveal>
-              <p className="eyebrow">What we solve</p>
-              <h2 className="headline mt-6 max-w-3xl">
+              <h2 className="headline max-w-3xl">
                 We help businesses&hellip;
               </h2>
             </Reveal>
@@ -148,8 +152,7 @@ export default function Home() {
           <SectionBackdrop variant="orbit" />
           <div className="shell">
             <Reveal>
-              <p className="eyebrow">Solutions</p>
-              <h2 className="headline mt-6 max-w-3xl">
+              <h2 className="headline max-w-3xl">
                 From first pixel to product barcode.
               </h2>
             </Reveal>
@@ -177,8 +180,7 @@ export default function Home() {
           <SectionBackdrop variant="rise" />
           <div className="shell">
             <Reveal>
-              <p className="eyebrow">Why work with us</p>
-              <h2 className="headline mt-6 max-w-3xl">
+              <h2 className="headline max-w-3xl">
                 We measure our work by what it earns you.
               </h2>
             </Reveal>

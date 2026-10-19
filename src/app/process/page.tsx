@@ -35,8 +35,7 @@ export default function ProcessPage() {
 
       <section className="shell page-cta">
         <FadeIn>
-          <p className="eyebrow">Ready when you are</p>
-          <h2 className="headline mt-6">
+          <h2 className="headline">
             Let&apos;s start at step one, together.
           </h2>
           <Link href="/contact" className="btn mt-8">

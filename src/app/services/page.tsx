@@ -111,8 +111,7 @@ export default function ServicesPage() {
 
       <section className="shell page-cta">
         <FadeIn>
-          <p className="eyebrow">Not sure where to start?</p>
-          <h2 className="headline mt-6">
+          <h2 className="headline">
             Tell us the goal. We&apos;ll tell you the service.
           </h2>
           <Link href="/contact" className="btn mt-8">

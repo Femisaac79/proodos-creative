@@ -6,6 +6,7 @@ import NewsletterForm from "@/components/newsletter-form";
 import { FadeIn, Intro } from "@/components/motion";
 import { ArrowRight, ArrowUpRight } from "@/components/icons";
 import { ARTICLES, getArticle } from "@/content/articles";
+import { SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
@@ -44,7 +45,6 @@ export default async function ArticlePage({
   const idx = ARTICLES.findIndex((a) => a.slug === slug);
   const next = ARTICLES[(idx + 1) % ARTICLES.length];
 
-  const SITE_URL = "https://proodoscreative.com";
   const articleLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -68,16 +68,6 @@ export default async function ArticlePage({
       <SectionBackdrop variant="pulse" />
 
       <article className="article-page shell">
-        <Intro as="p" className="eyebrow" delay={0.05}>
-          <Link href="/insights" className="article-back">
-            Insights
-          </Link>
-          <span className="article-crumb-sep" aria-hidden="true">
-            /
-          </span>
-          {article.tag}
-        </Intro>
-
         <Intro as="h1" className="article-headline" delay={0.15}>
           {article.title}
         </Intro>
@@ -133,7 +123,6 @@ export default async function ArticlePage({
 
       <section className="shell article-next">
         <FadeIn>
-          <p className="eyebrow">Read next</p>
           <Link href={`/insights/${next.slug}`} className="article-next-link">
             <span className="article-next-tag">{next.tag}</span>
             <span className="article-next-title">{next.title}</span>
@@ -146,8 +135,7 @@ export default async function ArticlePage({
 
       <section className="shell newsletter">
         <FadeIn>
-          <p className="eyebrow">Stay ahead</p>
-          <h2 className="headline mt-6 newsletter-title">
+          <h2 className="headline newsletter-title">
             Get the next one in your inbox.
           </h2>
           <p className="newsletter-copy">

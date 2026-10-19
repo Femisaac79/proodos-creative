@@ -46,8 +46,7 @@ export default function InsightsPage() {
 
       <section className="shell newsletter">
         <FadeIn>
-          <p className="eyebrow">The newsletter</p>
-          <h2 className="headline mt-6 newsletter-title">
+          <h2 className="headline newsletter-title">
             New reads, straight to your inbox.
           </h2>
           <p className="newsletter-copy">

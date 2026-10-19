@@ -1,11 +1,10 @@
-const WHATSAPP_NUMBER = "2348060575360";
+import { whatsappLink } from "@/lib/site";
+
 const WHATSAPP_MESSAGE =
   "Hi Proodos Creative, I'd like to talk about a project.";
 
 export default function WhatsAppButton() {
-  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    WHATSAPP_MESSAGE,
-  )}`;
+  const href = whatsappLink(WHATSAPP_MESSAGE);
 
   return (
     <a

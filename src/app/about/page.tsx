@@ -64,9 +64,6 @@ export default function AboutPage() {
 
       <section className="shell about-philosophy">
         <FadeIn>
-          <p className="eyebrow">Our philosophy</p>
-        </FadeIn>
-        <FadeIn delay={0.08}>
           <p className="about-statement">
             Most studios sell you how something looks. We care how it{" "}
             <em>performs</em>, because a business does not grow on compliments.
@@ -88,8 +85,7 @@ export default function AboutPage() {
 
       <section className="shell about-how">
         <FadeIn>
-          <p className="eyebrow">How we work</p>
-          <h2 className="headline mt-6 max-w-3xl">
+          <h2 className="headline max-w-3xl">
             The way a studio works tells you what it&apos;s like to hire one.
           </h2>
         </FadeIn>
@@ -105,8 +101,7 @@ export default function AboutPage() {
 
       <section className="shell page-cta">
         <FadeIn>
-          <p className="eyebrow">People buy people</p>
-          <h2 className="headline mt-6">Let&apos;s put a face to the work.</h2>
+          <h2 className="headline">Let&apos;s put a face to the work.</h2>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
             <Link href="/process" className="btn">
               See our process <ArrowUpRight size={16} />

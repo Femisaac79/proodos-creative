@@ -344,24 +344,36 @@ a:focus-visible {
   width: 100%;
 }
 
-/* The copy column — capped to half the hero's width on larger screens so
-   the right half stays free for whatever sits there next. */
 .hero-copy {
   width: 100%;
 }
 
+/* The first break only applies on desktop; on phones the headline wraps
+   naturally ("We turn / strangers / into / customers."). */
+.hero-br {
+  display: none;
+}
+
 @media (min-width: 64rem) {
-  .hero-copy {
-    max-width: 50%;
+  .hero-br {
+    display: inline;
   }
 
-  /* The shared .display sizing is tuned for full-width headlines
-     elsewhere (CTA sections, other page heroes). This column is capped to
-     half the shell's width to leave room for the video, so it needs its
-     own, smaller scale — otherwise "We turn strangers" / "into <word>."
-     wrap mid-phrase (or even mid-word) instead of sitting one per line. */
+  /* Three fixed lines — "We turn / strangers into / <word>" — so the
+     longest line is "strangers into" (~11.3em in Unbounded 800) and the
+     rotating word never reflows the others.
+
+     Sized against the video, not just the width: with the clip at 65%
+     wide, right -4%, cover-fit and right-aligned, the sculpture's left
+     edge lands at about (104vw - 70vh). Taller screens push it left, so
+     the type shrinks with vh as well as growing with vw. This keeps a
+     clear gap before the glass from 1024x768 up to 2560x1440 (the cap
+     matters on wide screens, where the centered shell moves the copy
+     right). */
   .hero .display {
-    font-size: clamp(1.6rem, 2.7vw, 2.6rem);
+    font-size: clamp(2.25rem, calc(8.45vw - 6.2vh - 5px), 4.5rem);
+    line-height: 1.02;
+    white-space: nowrap;
   }
 }
 
@@ -454,6 +466,12 @@ a:focus-visible {
 
 .word-letter {
   display: inline-block;
+}
+
+/* Promote letters to their own layers only while they're moving, rather
+   than holding a GPU layer per letter for the whole visit. */
+.word-cycle-leaving .word-letter,
+.word-cycle-entering .word-letter {
   will-change: transform, opacity, filter;
 }
 
@@ -564,11 +582,19 @@ a:focus-visible {
      paragraph reveals word by word. The pin only releases once the last
      word has lit up, so the section can't be scrolled past mid-read. */
   --manifesto-sticky-h: 100svh;
-  --manifesto-scroll: 165vh;
+  /* Kept short enough that the pin reads as a beat, not a wall: long pins
+     on phones feel like the page has stopped scrolling. */
+  --manifesto-scroll: 125vh;
   height: calc(var(--manifesto-sticky-h) + var(--manifesto-scroll));
   background: var(--ink);
   --mark-halo: var(--ink);
   --mark-arrow: var(--green);
+}
+
+@media (max-width: 47.999rem) {
+  .manifesto {
+    --manifesto-scroll: 105vh;
+  }
 }
 
 /* Pinned for the section's extra scroll height, so both stretches above
@@ -862,11 +888,22 @@ a:focus-visible {
   color: color-mix(in srgb, var(--ink) 78%, var(--green));
 }
 
+.footer-legal {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--ink) 70%, var(--green));
+}
+
+.footer-legal a:hover {
+  text-decoration: underline;
+}
+
 /* ---------------------------------------------------------------------------
    Section backdrops — the animated layers behind the green sections
-   (see section-backdrop.tsx for the motion; these are the shapes).
-   Framer Motion owns `transform` on these elements, so they're placed
-   with inset/margin only — never translate.
+   The keyframes below own `transform` on these elements, so they're
+   placed with inset/margin only — never translate.
 --------------------------------------------------------------------------- */
 
 .bd {
@@ -880,7 +917,6 @@ a:focus-visible {
   position: absolute;
   aspect-ratio: 1;
   border-radius: 50%;
-  will-change: transform;
 }
 
 .bd-blob-a {
@@ -908,7 +944,6 @@ a:focus-visible {
 .bd-ring {
   position: absolute;
   aspect-ratio: 1;
-  will-change: transform;
 }
 
 .bd-ring-a {
@@ -927,7 +962,6 @@ a:focus-visible {
   position: absolute;
   bottom: -2rem;
   border-radius: 50%;
-  will-change: transform, opacity;
 }
 
 .bd-glow {
@@ -944,7 +978,106 @@ a:focus-visible {
     rgba(255, 255, 255, 0.18),
     transparent 68%
   );
-  will-change: transform, opacity;
+}
+
+/* Backdrop motion — CSS keyframes (compositor-only). `.bd-idle` is toggled
+   by section-backdrop.tsx while the section is off-screen. */
+.bd-blob-a {
+  animation: bd-drift-a 30s ease-in-out infinite;
+}
+
+.bd-blob-b {
+  animation: bd-drift-b 38s ease-in-out infinite;
+}
+
+.bd-ring-a {
+  animation: bd-spin 80s linear infinite;
+}
+
+.bd-ring-b {
+  animation: bd-spin 110s linear infinite reverse;
+}
+
+.bd-dot {
+  opacity: 0;
+  animation: bd-rise var(--dur, 20s) linear var(--delay, 0s) infinite;
+}
+
+.bd-glow {
+  opacity: 0.55;
+  animation: bd-pulse 9s ease-in-out infinite;
+}
+
+.bd-idle * {
+  animation-play-state: paused !important;
+}
+
+@keyframes bd-drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(70px, -50px);
+  }
+  66% {
+    transform: translate(-50px, 45px);
+  }
+}
+
+@keyframes bd-drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-60px, 40px);
+  }
+  66% {
+    transform: translate(45px, -55px);
+  }
+}
+
+@keyframes bd-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes bd-rise {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  33%,
+  66% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-1200px);
+    opacity: 0;
+  }
+}
+
+@keyframes bd-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.16);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bd * {
+    animation: none !important;
+  }
+  .bd-dot {
+    display: none;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -1871,11 +2004,27 @@ a:focus-visible {
   margin-top: 0.5rem;
 }
 
-.contact-sent {
-  margin-top: 0.75rem;
-  font-size: 0.9rem;
-  color: var(--sub);
-  max-width: 44ch;
+.contact-submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.field[data-invalid] input,
+.field[data-invalid] textarea {
+  border-color: #7f1d1d;
+}
+
+.field-error {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #7f1d1d;
+}
+
+.theme-ink .field-error,
+.theme-ink .field[data-invalid] input,
+.theme-ink .field[data-invalid] textarea {
+  color: #fdba74;
+  border-color: #fdba74;
 }
 
 .contact-side {
@@ -2417,7 +2566,7 @@ a:focus-visible {
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   backface-visibility: hidden;
 }
 
@@ -2635,4 +2784,165 @@ a:focus-visible {
   .barcode-card {
     transition: none;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Thank-you page + legal pages
+--------------------------------------------------------------------------- */
+
+.thanks-steps {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .thanks-steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.thanks-step {
+  padding: 1.6rem 1.5rem;
+  border: 1px solid var(--panel-line);
+  border-radius: 16px;
+  background: var(--panel);
+}
+
+.thanks-step-num {
+  font-family: var(--font-header);
+  font-size: 0.85rem;
+  color: var(--sub);
+}
+
+.thanks-step-title {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.thanks-step-copy {
+  margin-top: 0.6rem;
+  color: var(--sub);
+  line-height: 1.6;
+}
+
+.legal-body {
+  margin-top: 0;
+  padding-bottom: clamp(4rem, 9vw, 7rem);
+}
+
+/* Cap line length but keep the column aligned with the hero, not centered. */
+.legal-body > section {
+  max-width: 46rem;
+}
+
+.legal-body > section + section {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.legal-body .article-h2:first-child {
+  margin-top: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Consent banner (only rendered when GA4 / Meta Pixel IDs are configured)
+--------------------------------------------------------------------------- */
+
+.consent {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 60;
+  max-width: min(26rem, calc(100vw - 6.5rem));
+  padding: 1.1rem 1.2rem;
+  border-radius: 16px;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+  animation: consent-in 0.5s cubic-bezier(0.2, 0.65, 0.2, 1) both;
+}
+
+.consent-copy {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.consent-link {
+  color: var(--green);
+  text-decoration: underline;
+}
+
+.consent-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.consent-btn {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--paper) 30%, transparent);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.consent-btn-primary {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--ink);
+}
+
+.footer-legal-btn {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.footer-legal-btn:hover {
+  text-decoration: underline;
+}
+
+@keyframes consent-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .consent {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Route transition (app/template.tsx)
+--------------------------------------------------------------------------- */
+
+.page-enter {
+  animation: page-enter 0.45s cubic-bezier(0.2, 0.65, 0.2, 1) both;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+}
+
+.legal-updated {
+  font-size: 0.85rem;
+  color: var(--sub);
 }

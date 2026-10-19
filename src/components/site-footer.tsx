@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Wordmark from "./wordmark";
+import { ADDRESS_LINE, CONTACT } from "@/lib/site";
+import { ConsentSettingsLink } from "./consent-analytics";
 
 const FOOTER_LINKS = [
   { href: "/work", label: "Work" },
@@ -29,14 +31,18 @@ export default function SiteFooter() {
 
         <div className="footer-meta mt-12 flex flex-col items-center justify-between gap-3 text-sm sm:flex-row">
           <span>&copy; {new Date().getFullYear()} Proodos Creative Ltd</span>
-          <a
-            href="mailto:hello@proodoscreative.com"
-            className="hover:underline"
-          >
-            hello@proodoscreative.com
+          <a href={`mailto:${CONTACT.email}`} className="hover:underline">
+            {CONTACT.email}
           </a>
-          <span>RC 9136559</span>
+          <span>{ADDRESS_LINE}</span>
+          <span>{CONTACT.rc}</span>
         </div>
+
+        <nav className="footer-legal mt-6" aria-label="Legal">
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms</Link>
+          <ConsentSettingsLink />
+        </nav>
       </div>
     </footer>
   );
